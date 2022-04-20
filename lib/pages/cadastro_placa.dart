@@ -46,6 +46,7 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
             ),
             TextFormField(
               controller: textController,
+              decoration: InputDecoration(),
             ),
             SizedBox(
               height: 65,
@@ -124,15 +125,21 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          'ERROR',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.red,
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ),
+                          backgroundColor: Color.fromARGB(255, 151, 19, 19),
+                          content: Text(
+                            'ERRO AO SALVAR',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.varelaRound(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(milliseconds: 500),
+                          elevation: 10),
                     );
                   }
                 },
