@@ -14,4 +14,8 @@ class DataModel {
       'valueService': valueService,
     };
   }
+
+  String toString() {
+    return toJson().toString();
+  }
 }
