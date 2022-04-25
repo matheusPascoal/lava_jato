@@ -33,137 +33,146 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Stack(children: [
-        Image.network(
-          'https://cdn.discordapp.com/attachments/940386713031819267/966436643563245608/Untitled.png',
-          fit: BoxFit.cover,
-          height: 1000,
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 90,
-            ),
-            TextFormField(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 90,
+          ),
+          Container(
+            height: 50,
+            width: 290,
+            child: TextFormField(
               controller: textController,
-              decoration: InputDecoration(),
-            ),
-            SizedBox(
-              height: 65,
-            ),
-            DropdownButton(
-              autofocus: true,
-              elevation: 16,
-              style: const TextStyle(color: Color.fromARGB(255, 2, 2, 2)),
-              underline: Container(
-                height: 2,
-                color: Color.fromARGB(255, 2, 2, 2),
+              decoration: InputDecoration(
+                labelText: 'Placa',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      width: 3, color: Color.fromARGB(255, 1, 11, 58)),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      width: 3, color: Color.fromARGB(255, 33, 17, 175)),
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
-              onChanged: (dynamic newValue) {
-                setState(() {
-                  selectedValue = newValue!;
-                });
-                print(selectedValue);
-              },
-              value: selectedValue,
-              items: _values
-                  .map<DropdownMenuItem>(
-                    (e) => DropdownMenuItem(
-                      value: e.value,
-                      child: Row(
-                        children: [
-                          Text(e.title!),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            e.value!.toString(),
-                          ),
-                        ],
-                      ),
+            ),
+          ),
+          SizedBox(
+            height: 65,
+          ),
+          DropdownButton(
+            autofocus: true,
+            elevation: 16,
+            style: const TextStyle(color: Color.fromARGB(255, 2, 2, 2)),
+            underline: Container(
+              height: 2,
+              color: Color.fromARGB(255, 2, 2, 2),
+            ),
+            onChanged: (dynamic newValue) {
+              setState(() {
+                selectedValue = newValue!;
+              });
+              print(selectedValue);
+            },
+            value: selectedValue,
+            items: _values
+                .map<DropdownMenuItem>(
+                  (e) => DropdownMenuItem(
+                    value: e.value,
+                    child: Row(
+                      children: [
+                        Text(e.title!),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          e.value!.toString(),
+                        ),
+                      ],
                     ),
-                  )
-                  .toList(),
-            ),
-            SizedBox(
-              height: 80,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color.fromARGB(255, 50, 79, 139),
-                border: Border.all(
-                  color: Color.fromARGB(255, 8, 2, 66),
-                  width: 4,
-                ),
-              ),
-              child: InkWell(
-                onTap: () async {
-                  var result = await _dataRepository.saveDataList(DataModel(
-                    licensePlate: textController.text,
-                    valueService: selectedValue,
-                  ));
-                  if (result == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          backgroundColor: Color.fromARGB(255, 40, 167, 97),
-                          content: Text(
-                            'DADOS SALVOS !',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.varelaRound(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          duration: Duration(milliseconds: 500),
-                          elevation: 10),
-                    );
-                    Navigator.pop(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Veiculos(),
-                        ));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          backgroundColor: Color.fromARGB(255, 151, 19, 19),
-                          content: Text(
-                            'ERRO AO SALVAR',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.varelaRound(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          duration: Duration(milliseconds: 500),
-                          elevation: 10),
-                    );
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(
-                    'CONFIRMAR',
-                    style: GoogleFonts.varelaRound(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
                   ),
+                )
+                .toList(),
+          ),
+          SizedBox(
+            height: 80,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Color.fromARGB(255, 50, 79, 139),
+              border: Border.all(
+                color: Color.fromARGB(255, 8, 2, 66),
+                width: 4,
+              ),
+            ),
+            child: InkWell(
+              onTap: () async {
+                var result = await _dataRepository.saveDataList(DataModel(
+                  licensePlate: textController.text,
+                  valueService: selectedValue,
+                ));
+                if (result == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        backgroundColor: Color.fromARGB(255, 40, 167, 97),
+                        content: Text(
+                          'DADOS SALVOS !',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.varelaRound(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(milliseconds: 500),
+                        elevation: 10),
+                  );
+                  Navigator.pop(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Veiculos(),
+                      ));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        backgroundColor: Color.fromARGB(255, 151, 19, 19),
+                        content: Text(
+                          'ERRO AO SALVAR',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.varelaRound(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(milliseconds: 500),
+                        elevation: 10),
+                  );
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Text(
+                  'CONFIRMAR',
+                  style: GoogleFonts.varelaRound(
+                      color: Colors.white,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-          ],
-        ),
-      ]),
+          ),
+        ],
+      ),
     ));
   }
 }
