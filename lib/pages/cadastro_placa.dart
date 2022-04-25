@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lava_jato/model/data_model.dart';
 import 'package:lava_jato/model/service_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lava_jato/pages/veiculos.dart';
 import '../repositories/repository.dart';
 
 class CadastroPlaca extends StatefulWidget {
@@ -122,6 +123,11 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
                           duration: Duration(milliseconds: 500),
                           elevation: 10),
                     );
+                    Navigator.pop(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Veiculos(),
+                        ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

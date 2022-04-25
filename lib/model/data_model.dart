@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class DataModel {
   String? licensePlate;
   double? valueService;
@@ -16,6 +18,7 @@ class DataModel {
   }
 
   String toString() {
-    return toJson().toString();
+    return json.encode(DataModel(
+        licensePlate: this.licensePlate, valueService: this.valueService));
   }
 }

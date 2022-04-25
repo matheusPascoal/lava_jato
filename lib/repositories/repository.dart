@@ -5,9 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const dataListKey = 'data_list';
 
 class DataRepository {
-  DataRepository() {
-    //LATE - ignora o null-Safety
-  }
+  DataRepository() {}
 
   Future<bool> saveDataList(DataModel data) async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -21,16 +19,19 @@ class DataRepository {
         .then((value) => true)
         .catchError((error) => false);
   }
-}
 
-// Future<List<DataModel>> getDataList() async {
-//   final sharedPreferences = await SharedPreference.instance;
-//   final List<String>? list_String =
-//       sharedPreferences.getStringList(dataListKey);
-//   if (list_String != null) {
-//     return list_String
-//         .map<DataModel>((e) => DataModel.fromJson(json.decode(e)))
-//         .toList();
-//   }
-//   return <DataModel>[];
-// }
+  Future<List<DataModel>> getService() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final List<String>? list_String =
+        sharedPreferences.getStringList(dataListKey);
+    if (list_String != null) {
+      return list_String.map<DataModel>((e) {
+        print(e);
+        var decode = json.decode(e);
+        print(decode);
+        return DataModel.fromJson(json.decode(e));
+      }).toList();
+    }
+    return <DataModel>[];
+  }
+}
