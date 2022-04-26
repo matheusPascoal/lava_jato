@@ -1,10 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:lava_jato/feedBack/snackBar.dart';
 import 'package:lava_jato/model/data_model.dart';
 import 'package:lava_jato/model/service_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lava_jato/pages/veiculos.dart';
+import 'package:lava_jato/shared/functions/functions_shared.dart';
+import 'package:lava_jato/widgets/cards_services.dart';
+import 'package:lava_jato/widgets/text_field_identifier.dart';
 import '../repositories/repository.dart';
 
 class CadastroPlaca extends StatefulWidget {
@@ -20,47 +24,56 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
 
   List<ServiceModel> _values = [
     ServiceModel(title: 'SELECIONE SERVIÇO', value: 0),
-    ServiceModel(title: 'Por fora  -', value: 15.00),
-    ServiceModel(title: 'Por dentro  -', value: 20.00),
-    ServiceModel(title: 'Geral  -', value: 30.00),
-    ServiceModel(title: 'Geral + cera  -', value: 40.00),
+    ServiceModel(title: 'Por fora  ', value: 15.00),
+    ServiceModel(title: 'Por dentro  ', value: 20.00),
+    ServiceModel(title: 'Geral  ', value: 30.00),
+    ServiceModel(title: 'Geral + cera  ', value: 40.00),
   ];
   double selectedValue = 0;
 
-  getData() async {}
+  _onTapButton() async {
+    var result = await _dataRepository.saveDataList(DataModel(
+      licensePlate: textController.text.toUpperCase(),
+      valueService: selectedValue,
+    ));
+    if (result == true) {
+      FunctionShared.showSnackBar(context, "DADOS SALVOS !", Colors.green);
+      Navigator.pop(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Veiculos(),
+          ));
+    } else {
+      FunctionShared.showSnackBar(
+          context, 'ERRO AO SALVAR!', Color.fromARGB(255, 231, 7, 7));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 90,
+            height: 150,
           ),
-          Container(
-            height: 50,
-            width: 290,
-            child: TextFormField(
-              controller: textController,
-              decoration: InputDecoration(
-                labelText: 'Placa',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                      width: 3, color: Color.fromARGB(255, 1, 11, 58)),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                      width: 3, color: Color.fromARGB(255, 33, 17, 175)),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
+          TextFieldIdentifier(
+            controller: textController,
+            label: "Placa",
           ),
           SizedBox(
-            height: 65,
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CardsServices(),
+              CardsServices(),
+              CardsServices(),
+              CardsServices(),
+              CardsServices(),
+            ],
           ),
           DropdownButton(
             autofocus: true,
@@ -83,13 +96,15 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
                     value: e.value,
                     child: Row(
                       children: [
-                        Text(e.title!),
+                        Center(
+                            child: Text(
+                          e.title!.toUpperCase(),
+                          textAlign: TextAlign.start,
+                        )),
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          e.value!.toString(),
-                        ),
+                        Text(e.value!.toString()),
                       ],
                     ),
                   ),
@@ -97,7 +112,7 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
                 .toList(),
           ),
           SizedBox(
-            height: 80,
+            height: 60,
           ),
           Container(
             decoration: BoxDecoration(
@@ -109,56 +124,7 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
               ),
             ),
             child: InkWell(
-              onTap: () async {
-                var result = await _dataRepository.saveDataList(DataModel(
-                  licensePlate: textController.text,
-                  valueService: selectedValue,
-                ));
-                if (result == true) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        backgroundColor: Color.fromARGB(255, 40, 167, 97),
-                        content: Text(
-                          'DADOS SALVOS !',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.varelaRound(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        duration: Duration(milliseconds: 500),
-                        elevation: 10),
-                  );
-                  Navigator.pop(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Veiculos(),
-                      ));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        backgroundColor: Color.fromARGB(255, 151, 19, 19),
-                        content: Text(
-                          'ERRO AO SALVAR',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.varelaRound(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        duration: Duration(milliseconds: 500),
-                        elevation: 10),
-                  );
-                }
-              },
+              onTap: _onTapButton,
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Text(

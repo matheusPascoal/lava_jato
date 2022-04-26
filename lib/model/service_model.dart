@@ -2,7 +2,7 @@ class ServiceModel {
   String? title;
   double? value;
 
-  ServiceModel({required this.title, required this.value});
+  ServiceModel({this.title, this.value});
 
   ServiceModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];

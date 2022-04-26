@@ -12,6 +12,7 @@ class DataRepository {
     var result = sharedPreferences.getStringList(dataListKey);
     if (result == null) {
       result = <String>[];
+      DataModel? deletedTodo;
     }
     result.add(data.toString());
     return await sharedPreferences
@@ -34,4 +35,14 @@ class DataRepository {
     }
     return <DataModel>[];
   }
+
+  void removeService(DataModel dataModel) {}
+}
+
+removeService(DataModel dataModel) async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  List<String>? list_String = [];
+  list_String = sharedPreferences.getStringList(dataListKey);
+  list_String!.remove(json.encode(dataModel.toJson()));
+  sharedPreferences.setStringList(dataListKey, list_String);
 }

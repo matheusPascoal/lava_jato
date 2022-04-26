@@ -15,6 +15,8 @@ class Veiculos extends StatefulWidget {
 class _VeiculosState extends State<Veiculos> {
   DataRepository dataRepository = DataRepository();
   List<DataModel> services = [];
+  DataModel? deleteData;
+  int? deletedDatas;
 
   receberDadosServico() async {
     var result = await dataRepository.getService();
@@ -31,6 +33,13 @@ class _VeiculosState extends State<Veiculos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'LISTA DE CLIENTES',
+          style: GoogleFonts.oswald(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
@@ -46,62 +55,44 @@ class _VeiculosState extends State<Veiculos> {
         child: Icon(Icons.add),
         //Chamar info caso tenho algo salvo
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                'LISTA DE CLIENTES',
-                style: GoogleFonts.oswald(
-                    fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              height: 500,
-              width: 300,
-              child: ListView(
-                children: services
-                    .map(
-                      (e) => Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(9),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: ListTile(
-                                trailing: Icon(
-                                  Icons.local_car_wash,
-                                  size: 50,
-                                ),
-                                dense: true,
-                                title: Text(
-                                  'PLACA - ${e.licensePlate.toString()}',
-                                  style: GoogleFonts.varelaRound(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Text(
-                                    'VALOR - ${e.valueService.toString()}',
-                                    style: GoogleFonts.varelaRound(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: services
+              .map(
+                (e) => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: ListTile(
+                          trailing: Icon(
+                            Icons.local_car_wash,
+                            size: 50,
                           ),
-                        ],
+                          dense: true,
+                          leading: ListTile(
+                            title: Text(
+                              'PLACA - ${e.licensePlate.toString()}',
+                              style: GoogleFonts.varelaRound(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                                'VALOR - ${e.valueService.toString()}',
+                                style: GoogleFonts.varelaRound(
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                          ),
+                        ),
                       ),
-                    )
-                    .toList(),
-              ),
-            ),
-          ],
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
         ),
       ),
     );
