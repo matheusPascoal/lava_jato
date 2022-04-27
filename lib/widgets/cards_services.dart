@@ -3,22 +3,26 @@ import 'package:tab_container/tab_container.dart';
 
 class CardsServices extends StatelessWidget {
   final VoidCallback? onTap;
-  final Widget? child;
-
-  const CardsServices({Key? key, this.onTap, this.child}) : super(key: key);
+  final IconData? icon;
+  final bool? selectedButton;
+  const CardsServices({Key? key, this.onTap, this.icon, this.selectedButton})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(1.5),
+          padding: const EdgeInsets.all(2),
           child: Container(
             height: 65,
             width: 65,
             decoration: BoxDecoration(
-                color: Colors.amber, borderRadius: BorderRadius.circular(4)),
-            child: child,
+                color: selectedButton == false ? Colors.grey : Colors.amber),
+            child: Icon(
+              icon,
+              size: 45,
+            ),
           ),
         ));
   }

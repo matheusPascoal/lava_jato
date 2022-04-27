@@ -7,6 +7,7 @@ import 'package:lava_jato/model/service_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lava_jato/pages/veiculos.dart';
 import 'package:lava_jato/shared/functions/functions_shared.dart';
+import 'package:lava_jato/shared/services/services.dart';
 import 'package:lava_jato/widgets/cards_services.dart';
 import 'package:lava_jato/widgets/text_field_identifier.dart';
 import '../repositories/repository.dart';
@@ -20,21 +21,40 @@ class CadastroPlaca extends StatefulWidget {
 
 class _CadastroPlacaState extends State<CadastroPlaca> {
   final TextEditingController textController = TextEditingController();
+
   final DataRepository _dataRepository = DataRepository();
 
-  List<ServiceModel> _values = [
-    ServiceModel(title: 'SELECIONE SERVIÇO', value: 0),
-    ServiceModel(title: 'Por fora  ', value: 15.00),
-    ServiceModel(title: 'Por dentro  ', value: 20.00),
-    ServiceModel(title: 'Geral  ', value: 30.00),
-    ServiceModel(title: 'Geral + cera  ', value: 40.00),
-  ];
-  double selectedValue = 0;
+  ServiceModel? selectedValue;
+
+  List<ServiceModel> serviceValues = [];
+
+  int selectedServices = 0;
+  _listService() {
+    switch (selectedServices) {
+      case 0:
+        serviceValues = ServiceValues.carroValues;
+        break;
+      case 1:
+        serviceValues = ServiceValues.motoValues;
+        break;
+      case 2:
+        serviceValues = ServiceValues.onibusValues;
+        break;
+      case 3:
+        serviceValues = ServiceValues.caminhaoValues;
+        break;
+      case 4:
+        serviceValues = ServiceValues.outrosValues;
+        break;
+      default:
+    }
+    setState(() {});
+  }
 
   _onTapButton() async {
     var result = await _dataRepository.saveDataList(DataModel(
       licensePlate: textController.text.toUpperCase(),
-      valueService: selectedValue,
+      //valueService: selectedValue,
     ));
     if (result == true) {
       FunctionShared.showSnackBar(context, "DADOS SALVOS !", Colors.green);
@@ -50,71 +70,88 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
   }
 
   @override
+  void initState() {
+    serviceValues = ServiceValues.carroValues;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 150,
-          ),
-          TextFieldIdentifier(
-            controller: textController,
-            label: "Placa",
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CardsServices(),
-              CardsServices(),
-              CardsServices(),
-              CardsServices(),
-              CardsServices(),
-            ],
-          ),
-          DropdownButton(
-            autofocus: true,
-            elevation: 16,
-            style: const TextStyle(color: Color.fromARGB(255, 2, 2, 2)),
-            underline: Container(
-              height: 2,
-              color: Color.fromARGB(255, 2, 2, 2),
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 150,
+        ),
+        TextFieldIdentifier(
+          controller: textController,
+          label: "Placa",
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
+            height: 80,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: List.generate(
+                5,
+                (index) => CardsServices(
+                  onTap: () {
+                    setState(() {
+                      selectedServices = index;
+                      selectedValue = null;
+                    });
+
+                    _listService();
+                    print(index);
+                  },
+                  icon: Icons.local_car_wash_outlined,
+                  selectedButton: selectedServices == index,
+                ),
+              ),
             ),
-            onChanged: (dynamic newValue) {
-              setState(() {
-                selectedValue = newValue!;
-              });
-              print(selectedValue);
-            },
-            value: selectedValue,
-            items: _values
-                .map<DropdownMenuItem>(
-                  (e) => DropdownMenuItem(
-                    value: e.value,
-                    child: Row(
-                      children: [
-                        Center(
-                            child: Text(
-                          e.title!.toUpperCase(),
-                          textAlign: TextAlign.start,
-                        )),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(e.value!.toString()),
-                      ],
+          ),
+        ),
+        SizedBox(
+          width: 40,
+        ),
+        DropdownButton(
+          autofocus: true,
+          elevation: 16,
+          style: TextStyle(color: Color.fromARGB(255, 2, 2, 2)),
+          underline: Container(
+            height: 2,
+            color: Color.fromARGB(255, 2, 2, 2),
+          ),
+          onChanged: (dynamic newValue) {
+            setState(() {
+              selectedValue = newValue!;
+            });
+          },
+          value: selectedValue,
+          items: serviceValues
+              .map<DropdownMenuItem>(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Center(
+                    child: Text(
+                      e.title!.toUpperCase(),
                     ),
                   ),
-                )
-                .toList(),
-          ),
-          SizedBox(
-            height: 60,
-          ),
-          Container(
+                ),
+              )
+              .toList(),
+        ),
+        SizedBox(
+          width: 40,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Color.fromARGB(255, 50, 79, 139),
@@ -137,8 +174,8 @@ class _CadastroPlacaState extends State<CadastroPlaca> {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     ));
   }
 }

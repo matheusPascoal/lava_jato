@@ -75,20 +75,17 @@ class _VeiculosState extends State<Veiculos> {
                             size: 50,
                           ),
                           dense: true,
-                          leading: ListTile(
-                            title: Text(
-                              'PLACA - ${e.licensePlate.toString()}',
-                              style: GoogleFonts.varelaRound(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                                'VALOR - ${e.valueService.toString()}',
-                                style: GoogleFonts.varelaRound(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                          title: Text(
+                            'PLACA - ${e.licensePlate.toString()}',
+                            style: GoogleFonts.varelaRound(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
+                          subtitle: Text('VALOR - ${e.valueService.toString()}',
+                              style: GoogleFonts.varelaRound(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               )
